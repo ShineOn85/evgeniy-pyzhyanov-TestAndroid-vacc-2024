@@ -1,4 +1,4 @@
-package ru.absolutelee.fakestoreapp
+package ru.absolutelee.fakestoreapp.presentation.main
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

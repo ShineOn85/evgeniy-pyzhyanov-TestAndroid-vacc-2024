@@ -1,9 +1,10 @@
-package ru.absolutelee.fakestoreapp
+package ru.absolutelee.fakestoreapp.presentation.main
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.ui.graphics.vector.ImageVector
+import ru.absolutelee.fakestoreapp.R
 import ru.absolutelee.fakestoreapp.navigation.Screen
 
 sealed class NavigationItem(

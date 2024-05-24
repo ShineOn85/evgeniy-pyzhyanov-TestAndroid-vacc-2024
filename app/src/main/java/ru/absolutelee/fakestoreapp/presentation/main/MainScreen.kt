@@ -1,4 +1,4 @@
-package ru.absolutelee.fakestoreapp
+package ru.absolutelee.fakestoreapp.presentation.main
 
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
