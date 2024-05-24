@@ -5,7 +5,6 @@ import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
 import ru.absolutelee.fakestoreapp.presentation.main.MainViewModel
-import ru.absolutelee.fakestoreapp.presentation.product_detail.ProductDetailViewModel
 import ru.absolutelee.fakestoreapp.presentation.products.ProductsViewModel
 import ru.absolutelee.fakestoreapp.presentation.shopping_cart.ShoppingCartViewModel
 

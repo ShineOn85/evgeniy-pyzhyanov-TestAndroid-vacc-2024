@@ -13,7 +13,6 @@ import kotlinx.coroutines.flow.retry
 import kotlinx.coroutines.flow.stateIn
 import ru.absolutelee.fakestoreapp.data.mapper.mapToProductEntity
 import ru.absolutelee.fakestoreapp.data.mergeWith
-import ru.absolutelee.fakestoreapp.data.network.ApiFactory
 import ru.absolutelee.fakestoreapp.data.network.ApiService
 import ru.absolutelee.fakestoreapp.domain.entity.AuthState
 import ru.absolutelee.fakestoreapp.domain.entity.Product
