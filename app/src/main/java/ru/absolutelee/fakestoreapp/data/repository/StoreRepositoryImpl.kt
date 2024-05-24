@@ -9,19 +9,26 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
-import ru.absolutelee.fakestoreapp.data.mapToProductEntity
+import ru.absolutelee.fakestoreapp.data.mapper.mapToProductEntity
+import ru.absolutelee.fakestoreapp.data.mergeWith
 import ru.absolutelee.fakestoreapp.data.network.ApiFactory
 import ru.absolutelee.fakestoreapp.domain.entity.AuthState
 import ru.absolutelee.fakestoreapp.domain.entity.Product
 import ru.absolutelee.fakestoreapp.domain.repository.StoreRepository
 
-class StoreRepositoryImpl() : StoreRepository {
+class StoreRepositoryImpl : StoreRepository {
 
     private val apiService = ApiFactory.apiService
 
     private val scope = CoroutineScope(Dispatchers.Default)
 
     private val loggedIn = MutableStateFlow(false)
+
+    private val changeProductListFlow = MutableSharedFlow<List<Product>>()
+
+    private val _products = mutableListOf<Product>()
+    private val products: List<Product>
+        get() = _products.toList()
 
     override fun getAuthState(): StateFlow<AuthState> {
         return flow {
@@ -37,11 +44,13 @@ class StoreRepositoryImpl() : StoreRepository {
     }
 
     override fun getAllProducts(): StateFlow<List<Product>> = flow {
-        val products = apiService.getAllProducts().map {
+        val productsResponse = apiService.getAllProducts().map {
             it.mapToProductEntity()
         }
+        _products.addAll(productsResponse)
         emit(products)
-    }.catch { }
+    }.mergeWith(changeProductListFlow)
+        .catch { }
         .stateIn(
             scope = scope,
             started = SharingStarted.Lazily,
@@ -62,7 +71,10 @@ class StoreRepositoryImpl() : StoreRepository {
     }
 
     override suspend fun addToCart(product: Product) {
-        TODO("Not yet implemented")
+        val newProduct = product.copy(isAddToCart = true)
+        val productIndex = _products.indexOf(product)
+        _products[productIndex] = newProduct
+        changeProductListFlow.emit(products)
     }
 
     override suspend fun deleteFromCart(product: Product) {

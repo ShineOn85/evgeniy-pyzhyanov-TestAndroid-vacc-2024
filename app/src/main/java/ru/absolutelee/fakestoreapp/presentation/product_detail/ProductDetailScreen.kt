@@ -59,7 +59,8 @@ fun ProductDetailScreen(
     onBackPressed: () -> Unit
 ) {
 
-    val viewModel = viewModel(ProductDetailViewModel::class, factory = ProductDetailsViewModelFactory(product))
+    val viewModel =
+        viewModel(ProductDetailViewModel::class, factory = ProductDetailsViewModelFactory(product))
 
     val state = viewModel.state.collectAsState()
 
@@ -103,7 +104,11 @@ fun ProductDetailScreen(
                         .fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(text = "$${state.value.price}", fontSize = 24.sp, fontWeight = FontWeight.Bold)
+                    Text(
+                        text = "$${state.value.price}",
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold
+                    )
                     Box {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(
@@ -152,8 +157,8 @@ fun ProductDetailScreen(
                     text = state.value.description,
                     fontSize = 16.sp
                 )
-                Box(modifier = Modifier.padding(16.dp)){
-                    AddToCartButton(onAddToCardClick = {})
+                Box(modifier = Modifier.padding(16.dp)) {
+                    AddToCartButton(product, onAddToCardClick = {})
                 }
                 Spacer(modifier = Modifier.height(80.dp))
 

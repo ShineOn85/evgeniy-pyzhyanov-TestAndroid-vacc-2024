@@ -80,7 +80,6 @@ fun MainScreen() {
                     onCardClick = {
                         navigationState.navigateToProductDetail(it)
                     },
-                    onAddToCartClick = {}
                 )
             },
             productDetailScreenContent = {

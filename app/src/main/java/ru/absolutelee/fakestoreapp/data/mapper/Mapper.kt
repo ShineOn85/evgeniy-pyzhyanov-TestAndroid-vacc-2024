@@ -1,4 +1,4 @@
-package ru.absolutelee.fakestoreapp.data
+package ru.absolutelee.fakestoreapp.data.mapper
 
 import ru.absolutelee.fakestoreapp.data.model.ProductDto
 import ru.absolutelee.fakestoreapp.domain.entity.Product

@@ -15,7 +15,6 @@ import kotlin.random.Random
 @Composable
 fun ProductsScreen(
     onCardClick: (Product) -> Unit,
-    onAddToCartClick: (Product) -> Unit
 ) {
     val viewModel = viewModel(ProductsViewModel::class)
 
@@ -25,11 +24,13 @@ fun ProductsScreen(
         columns = GridCells.Fixed(2),
         contentPadding = PaddingValues(bottom = 80.dp)
     ) {
-        items(items = state.value, key = { it.id }) {
+        items(items = state.value, key = { it.id }) { product ->
             ProductItem(
-                product = it,
+                product = product,
                 onCardClick,
-                onAddToCardClick = onAddToCartClick
+                onAddToCardClick = {
+                    viewModel.addToCart(it)
+                }
             )
         }
     }

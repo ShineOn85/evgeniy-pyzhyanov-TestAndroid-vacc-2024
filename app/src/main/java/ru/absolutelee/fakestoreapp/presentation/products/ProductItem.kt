@@ -82,7 +82,7 @@ fun ProductItem(
                 Text(text = "• ${product.ratingCount} count")
             }
             Spacer(modifier = Modifier.height(8.dp))
-            AddToCartButton(onAddToCardClick)
+            AddToCartButton(product, onAddToCardClick)
         }
 
 
@@ -90,10 +90,10 @@ fun ProductItem(
 }
 
 @Composable
-fun AddToCartButton(onAddToCardClick: (Product) -> Unit) {
+fun AddToCartButton(product: Product, onAddToCardClick: (Product) -> Unit) {
     Button(
         modifier = Modifier.fillMaxWidth(),
-        onClick = { onAddToCardClick }) {
+        onClick = { onAddToCardClick.invoke(product) }) {
         Icon(
             modifier = Modifier.size(16.dp),
             imageVector = Icons.Outlined.ShoppingCart, contentDescription = stringResource(
@@ -101,7 +101,7 @@ fun AddToCartButton(onAddToCardClick: (Product) -> Unit) {
             )
         )
         Spacer(modifier = Modifier.width(8.dp))
-        Text(text = stringResource(id = R.string.add_to_cart))
+        Text(text = if (product.isAddToCart) "Delete" else stringResource(id = R.string.add_to_cart))
     }
 }
 
