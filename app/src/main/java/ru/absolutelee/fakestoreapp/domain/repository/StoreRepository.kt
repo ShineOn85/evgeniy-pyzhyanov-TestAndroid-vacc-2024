@@ -16,5 +16,4 @@ interface StoreRepository {
 
     suspend fun changeIsCartStatus(product: Product)
 
-    suspend fun deleteFromCart(product: Product)
 }

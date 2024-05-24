@@ -1,5 +1,6 @@
 package ru.absolutelee.fakestoreapp.data.repository
 
+import android.util.Log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -29,6 +30,10 @@ class StoreRepositoryImpl : StoreRepository {
     private val _products = mutableListOf<Product>()
     private val products: List<Product>
         get() = _products.toList()
+
+    private val _cartProducts = mutableListOf<Product>()
+    private val cartProducts: List<Product>
+        get() = _cartProducts.toList()
 
     override fun getAuthState(): StateFlow<AuthState> {
         return flow {
@@ -71,17 +76,18 @@ class StoreRepositoryImpl : StoreRepository {
     }
 
     override suspend fun changeIsCartStatus(product: Product) {
-        val newProduct = if (product.isAddToCart) {
-            product.copy(isAddToCart = false)
+        if (product.isAddToCart) {
+            _cartProducts.remove(product)
+            val newProduct = product.copy(isAddToCart = false)
+            val productIndex = _products.indexOf(product)
+            _products[productIndex] = newProduct
         } else {
-            product.copy(isAddToCart = true)
-        }
-        val productIndex = _products.indexOf(product)
-        _products[productIndex] = newProduct
-        changeProductListFlow.emit(products)
-    }
+            val newProduct = product.copy(isAddToCart = true)
+            _cartProducts.add(newProduct)
+            val productIndex = _products.indexOf(product)
+            _products[productIndex] = newProduct
 
-    override suspend fun deleteFromCart(product: Product) {
-        TODO("Not yet implemented")
+        }
+        changeProductListFlow.emit(products)
     }
 }
