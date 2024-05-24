@@ -24,12 +24,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import ru.absolutelee.fakestoreapp.R
 import ru.absolutelee.fakestoreapp.domain.entity.Product
 
@@ -50,9 +53,11 @@ fun ProductItem(
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background)
     ) {
 
-        Image(
-            painter = painterResource(id = R.drawable.img),
-            contentDescription = stringResource(R.string.product_image)
+        AsyncImage(
+            modifier = Modifier.height(210.dp),
+            model = product.imageUrl,
+            contentDescription = stringResource(R.string.product_image),
+            contentScale = ContentScale.FillBounds
         )
         Column(modifier = Modifier.padding(8.dp)) {
             Text(
@@ -69,7 +74,7 @@ fun ProductItem(
                     modifier = Modifier.size(16.dp),
                     imageVector = Icons.Default.Star,
                     contentDescription = stringResource(R.string.rating_icon),
-                    tint = Color.Yellow
+                    tint = colorResource(id = R.color.dark_yellow)
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(text = product.rating.toString(), fontWeight = FontWeight.Bold)
