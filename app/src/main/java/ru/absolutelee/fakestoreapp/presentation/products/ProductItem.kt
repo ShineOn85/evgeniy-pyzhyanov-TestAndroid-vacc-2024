@@ -1,7 +1,8 @@
 package ru.absolutelee.fakestoreapp.presentation.products
 
+import android.util.Log
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,14 +12,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -40,6 +41,10 @@ fun ProductItem(product: Product) {
             .wrapContentHeight()
             .width(200.dp)
             .padding(8.dp)
+            .clickable {
+                       Log.d("ProductItem", "${product.id}")
+            },
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background)
     ) {
 
         Image(
@@ -68,6 +73,7 @@ fun ProductItem(product: Product) {
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(text = "• ${product.ratingCount} count")
             }
+            Spacer(modifier = Modifier.height(8.dp))
             Button(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = { /*TODO*/ }) {

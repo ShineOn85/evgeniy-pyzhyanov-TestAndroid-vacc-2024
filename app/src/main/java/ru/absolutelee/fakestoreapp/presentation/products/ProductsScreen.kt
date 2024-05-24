@@ -1,16 +1,18 @@
 package ru.absolutelee.fakestoreapp.presentation.products
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import ru.absolutelee.fakestoreapp.domain.entity.Product
 import kotlin.random.Random
 
 @Composable
 fun ProductsScreen(products: List<Product>) {
-    LazyVerticalGrid(columns = GridCells.Fixed(2)) {
+    LazyVerticalGrid(columns = GridCells.Fixed(2), contentPadding = PaddingValues(bottom = 80.dp)) {
         items(items = products, key = { it.id }) {
             ProductItem(product = it)
         }

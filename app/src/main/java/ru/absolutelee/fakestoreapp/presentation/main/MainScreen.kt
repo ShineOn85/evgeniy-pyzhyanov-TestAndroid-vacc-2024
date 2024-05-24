@@ -11,8 +11,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
+import ru.absolutelee.fakestoreapp.domain.entity.Product
 import ru.absolutelee.fakestoreapp.navigation.AppNavGraph
 import ru.absolutelee.fakestoreapp.navigation.rememberNavigationState
+import ru.absolutelee.fakestoreapp.presentation.products.ProductsScreen
+import kotlin.random.Random
 
 @Preview(showBackground = true)
 @Composable
@@ -54,7 +57,25 @@ fun MainScreen() {
 
         AppNavGraph(
             navHostController = navigationState.navHostController,
-            productsScreenContent = { Text(text = "products") },
+            productsScreenContent = {
+                val products = mutableListOf<Product>().apply {
+                    for (i in 0..10) {
+                        add(
+                            Product(
+                                id = i,
+                                title = "title $i",
+                                price = (i * 10).toDouble(),
+                                rating = i.toDouble() / 2f,
+                                ratingCount = i * 15,
+                                imageUrl = "",
+                                isAddToCart = Random.nextBoolean(),
+                                description = "description $i"
+                            )
+                        )
+                    }
+                }
+                ProductsScreen(products = products)
+            },
             productDetailScreenContent = { Text(text = "detail")},
             shoppingCartScreenContent = { Text(text = "cart")}
         )
