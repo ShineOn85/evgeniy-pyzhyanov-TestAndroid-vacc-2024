@@ -3,14 +3,12 @@ package ru.absolutelee.fakestoreapp.data.model
 import com.google.gson.annotations.SerializedName
 
 data class ProductDto(
-    @SerializedName("category")
-    val category: String,
-    @SerializedName("description")
-    val description: String,
     @SerializedName("id")
     val id: Int,
+    @SerializedName("description")
+    val description: String,
     @SerializedName("image")
-    val image: String,
+    val imageUrl: String,
     @SerializedName("price")
     val price: Double,
     @SerializedName("rating")
