@@ -77,7 +77,6 @@ fun MainScreen() {
                     }
                 }
                 ProductsScreen(
-                    products = products,
                     onCardClick = {
                         navigationState.navigateToProductDetail(it)
                     },
