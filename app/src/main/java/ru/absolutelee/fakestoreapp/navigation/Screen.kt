@@ -14,7 +14,7 @@ sealed class Screen(
     data object ProductDetailScreen : Screen(ROUTE_PRODUCT_DETAIL)
     {
 
-        private const val ROUTE_FOR_ID = "comments_screen"
+        private const val ROUTE_FOR_ID = "product_detail_screen"
 
         fun getRouteWithArgs(product: Product): String {
             val productJson = Gson().toJson(product)

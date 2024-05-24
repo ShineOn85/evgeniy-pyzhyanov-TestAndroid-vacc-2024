@@ -2,4 +2,16 @@
     <string name="app_name">FakeStoreApp</string>
     <string name="home">Home</string>
     <string name="shopping_cart">Shopping Cart</string>
+    <string name="product_image">Product image</string>
+    <string name="rating_icon">rating icon</string>
+    <string name="icon_cart">icon_cart</string>
+    <string name="or_sign_up">or sign up</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+    <string name="email_address">Email address</string>
+    <string name="welcome">Welcome</string>
+    <string name="welcome_image">welcome image</string>
+    <string name="description">Description</string>
+    <string name="add_to_cart">Add to cart</string>
+    <string name="delete_icon">delete icon</string>
 </resources>
