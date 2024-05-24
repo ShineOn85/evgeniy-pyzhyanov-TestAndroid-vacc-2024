@@ -11,10 +11,21 @@ import ru.absolutelee.fakestoreapp.domain.entity.Product
 import kotlin.random.Random
 
 @Composable
-fun ProductsScreen(products: List<Product>, onCardClick: (Product) -> Unit) {
-    LazyVerticalGrid(columns = GridCells.Fixed(2), contentPadding = PaddingValues(bottom = 80.dp)) {
+fun ProductsScreen(
+    products: List<Product>,
+    onCardClick: (Product) -> Unit,
+    onAddToCartClick: (Product) -> Unit
+) {
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
+        contentPadding = PaddingValues(bottom = 80.dp)
+    ) {
         items(items = products, key = { it.id }) {
-            ProductItem(product = it, onCardClick)
+            ProductItem(
+                product = it,
+                onCardClick,
+                onAddToCardClick = onAddToCartClick
+            )
         }
     }
 }
@@ -33,10 +44,10 @@ fun ProductScreenPreview() {
                     ratingCount = i * 15,
                     imageUrl = "",
                     isAddToCart = Random.nextBoolean(),
-                    description = "description $i"
+                    description = "Your perfect pack for everyday use and walks in the forest. Stash your laptop (up to 15 inches) in the padded sleeve, your everyday"
                 )
             )
         }
     }
-    ProductsScreen(products = products, onCardClick = {})
+    ProductsScreen(products = products, onCardClick = {}, onAddToCartClick = {})
 }

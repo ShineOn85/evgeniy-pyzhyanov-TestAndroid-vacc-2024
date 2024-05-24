@@ -34,7 +34,11 @@ import ru.absolutelee.fakestoreapp.R
 import ru.absolutelee.fakestoreapp.domain.entity.Product
 
 @Composable
-fun ProductItem(product: Product, onCardClick: (Product) -> Unit) {
+fun ProductItem(
+    product: Product,
+    onCardClick: (Product) -> Unit,
+    onAddToCardClick: (Product) -> Unit
+) {
     Card(
         modifier = Modifier
             .wrapContentHeight()
@@ -52,7 +56,7 @@ fun ProductItem(product: Product, onCardClick: (Product) -> Unit) {
         )
         Column(modifier = Modifier.padding(8.dp)) {
             Text(
-                text = "Price: ${product.price}",
+                text = "Price: $${product.price}",
                 fontWeight = FontWeight.Bold,
                 fontSize = 16.sp
             )
@@ -73,21 +77,26 @@ fun ProductItem(product: Product, onCardClick: (Product) -> Unit) {
                 Text(text = "• ${product.ratingCount} count")
             }
             Spacer(modifier = Modifier.height(8.dp))
-            Button(
-                modifier = Modifier.fillMaxWidth(),
-                onClick = { /*TODO*/ }) {
-                Icon(
-                    modifier = Modifier.size(16.dp),
-                    imageVector = Icons.Outlined.ShoppingCart, contentDescription = stringResource(
-                        R.string.icon_cart
-                    )
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(text = "Add to cart")
-            }
+            AddToCartButton(onAddToCardClick)
         }
 
 
+    }
+}
+
+@Composable
+fun AddToCartButton(onAddToCardClick: (Product) -> Unit) {
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = { onAddToCardClick }) {
+        Icon(
+            modifier = Modifier.size(16.dp),
+            imageVector = Icons.Outlined.ShoppingCart, contentDescription = stringResource(
+                R.string.icon_cart
+            )
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(text = stringResource(id = R.string.add_to_cart))
     }
 }
 
@@ -104,5 +113,5 @@ fun ProductItemPreview() {
         isAddToCart = false,
         description = ""
     )
-    ProductItem(product = product, onCardClick = {})
+    ProductItem(product = product, onCardClick = {}, onAddToCardClick = {})
 }
