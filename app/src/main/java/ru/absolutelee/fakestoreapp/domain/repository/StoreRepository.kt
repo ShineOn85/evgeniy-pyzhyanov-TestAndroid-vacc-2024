@@ -14,7 +14,7 @@ interface StoreRepository {
 
     suspend fun auth()
 
-    suspend fun addToCart(product: Product)
+    suspend fun changeIsCartStatus(product: Product)
 
     suspend fun deleteFromCart(product: Product)
 }

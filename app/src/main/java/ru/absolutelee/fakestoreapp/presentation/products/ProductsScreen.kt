@@ -6,11 +6,9 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import ru.absolutelee.fakestoreapp.domain.entity.Product
-import kotlin.random.Random
 
 @Composable
 fun ProductsScreen(
@@ -28,8 +26,8 @@ fun ProductsScreen(
             ProductItem(
                 product = product,
                 onCardClick,
-                onAddToCardClick = {
-                    viewModel.addToCart(it)
+                omChangeCartStatusClick = {
+                    viewModel.changeCartStatus(it)
                 }
             )
         }

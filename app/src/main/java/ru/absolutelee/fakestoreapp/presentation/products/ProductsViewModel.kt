@@ -5,20 +5,20 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.absolutelee.fakestoreapp.data.repository.StoreRepositoryImpl
 import ru.absolutelee.fakestoreapp.domain.entity.Product
-import ru.absolutelee.fakestoreapp.domain.usecase.AddToCartUseCase
+import ru.absolutelee.fakestoreapp.domain.usecase.ChangeIsCartStatusUseCase
 import ru.absolutelee.fakestoreapp.domain.usecase.GetAllProductsUseCase
 
 class ProductsViewModel() : ViewModel() {
 
     private val repository = StoreRepositoryImpl()
     private val getAllProductsUseCase = GetAllProductsUseCase(repository)
-    private val addToCartUseCase = AddToCartUseCase(repository)
+    private val changeIsCartStatusUseCase = ChangeIsCartStatusUseCase(repository)
 
     val state = getAllProductsUseCase()
 
-    fun addToCart(product: Product) {
+    fun changeCartStatus(product: Product) {
         viewModelScope.launch {
-            addToCartUseCase(product)
+            changeIsCartStatusUseCase(product)
         }
     }
 

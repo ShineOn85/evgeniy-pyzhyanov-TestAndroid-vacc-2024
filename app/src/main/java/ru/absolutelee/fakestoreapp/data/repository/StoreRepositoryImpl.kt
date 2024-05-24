@@ -70,8 +70,12 @@ class StoreRepositoryImpl : StoreRepository {
         loggedIn.emit(true)
     }
 
-    override suspend fun addToCart(product: Product) {
-        val newProduct = product.copy(isAddToCart = true)
+    override suspend fun changeIsCartStatus(product: Product) {
+        val newProduct = if (product.isAddToCart) {
+            product.copy(isAddToCart = false)
+        } else {
+            product.copy(isAddToCart = true)
+        }
         val productIndex = _products.indexOf(product)
         _products[productIndex] = newProduct
         changeProductListFlow.emit(products)
