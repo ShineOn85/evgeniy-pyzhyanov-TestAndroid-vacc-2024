@@ -9,13 +9,15 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import ru.absolutelee.fakestoreapp.domain.entity.Product
+import ru.absolutelee.fakestoreapp.presentation.getApplicationComponent
 
 @Composable
 fun ProductsScreen(
     onCardClick: (Product) -> Unit,
 ) {
-    val viewModel = viewModel(ProductsViewModel::class)
 
+    val component = getApplicationComponent()
+    val viewModel: ProductsViewModel = viewModel(factory = component.getViewModelFactory())
     val state = viewModel.state.collectAsState()
 
 

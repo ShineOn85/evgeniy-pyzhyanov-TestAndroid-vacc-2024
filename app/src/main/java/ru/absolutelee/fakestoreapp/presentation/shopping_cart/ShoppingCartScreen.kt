@@ -26,12 +26,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import ru.absolutelee.fakestoreapp.presentation.getApplicationComponent
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShoppingCartScreen() {
-    val viewModel = viewModel(ShoppingCartViewModel::class)
+    val component = getApplicationComponent()
+    val viewModel: ShoppingCartViewModel = viewModel(factory = component.getViewModelFactory())
     val state = viewModel.state.collectAsState()
     Scaffold(
         containerColor = MaterialTheme.colorScheme.secondaryContainer,

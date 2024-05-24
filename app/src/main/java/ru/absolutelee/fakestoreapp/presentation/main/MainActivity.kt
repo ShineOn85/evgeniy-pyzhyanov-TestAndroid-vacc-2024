@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.viewmodel.compose.viewModel
 import ru.absolutelee.fakestoreapp.domain.entity.AuthState
+import ru.absolutelee.fakestoreapp.presentation.getApplicationComponent
 import ru.absolutelee.fakestoreapp.ui.theme.FakeStoreAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -14,7 +15,8 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             FakeStoreAppTheme(dynamicColor = false) {
-                val viewModel = viewModel(MainViewModel::class)
+                val component = getApplicationComponent()
+                val viewModel: MainViewModel = viewModel(factory = component.getViewModelFactory())
                 val state = viewModel.state.collectAsState()
 
                 when (state.value) {

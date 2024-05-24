@@ -11,13 +11,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
-import ru.absolutelee.fakestoreapp.domain.entity.Product
 import ru.absolutelee.fakestoreapp.navigation.AppNavGraph
 import ru.absolutelee.fakestoreapp.navigation.rememberNavigationState
 import ru.absolutelee.fakestoreapp.presentation.product_detail.ProductDetailScreen
 import ru.absolutelee.fakestoreapp.presentation.products.ProductsScreen
 import ru.absolutelee.fakestoreapp.presentation.shopping_cart.ShoppingCartScreen
-import kotlin.random.Random
 
 @Preview(showBackground = true)
 @Composable
