@@ -1,5 +1,6 @@
 package ru.absolutelee.fakestoreapp.presentation.main
 
+import android.util.Patterns
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -11,13 +12,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,11 +37,27 @@ import ru.absolutelee.fakestoreapp.R
 
 @Composable
 fun LoginScreen(onLoginClick: () -> Unit) {
-    val email = rememberSaveable {
+    var email by rememberSaveable {
         mutableStateOf("")
     }
-    val password = rememberSaveable {
+    var password by rememberSaveable {
         mutableStateOf("")
+    }
+
+    var isEmailError by rememberSaveable {
+        mutableStateOf(false)
+    }
+
+    var isPasswordError by rememberSaveable {
+        mutableStateOf(false)
+    }
+
+    fun isEmailValid(email: String) {
+        isEmailError = !Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    }
+
+    fun isPasswordValid(password: String) {
+        isPasswordError = password.length < 4
     }
 
     Box(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
@@ -65,32 +85,55 @@ fun LoginScreen(onLoginClick: () -> Unit) {
 
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = email.value,
+                shape = RoundedCornerShape(24.dp),
+                value = email,
                 onValueChange = {
-                    email.value = it
+                    isEmailValid(it)
+                    email = it
                 },
                 label = {
                     Text(text = stringResource(R.string.email_address))
                 },
-                singleLine = true
+                singleLine = true,
+                isError = isEmailError,
+                supportingText = {
+                    if (isEmailError) {
+                        Text(text = stringResource(R.string.invalid_email))
+                    }
+                }
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = password.value,
+                shape = RoundedCornerShape(24.dp),
+                value = password,
                 onValueChange = {
-                    password.value = it
+                    isPasswordValid(it)
+                    password = it
                 },
                 visualTransformation = PasswordVisualTransformation(),
                 label = {
                     Text(text = stringResource(R.string.password))
                 },
                 singleLine = true,
+                isError = isPasswordError,
+                supportingText = {
+                    if (isPasswordError) {
+                        Text(text = stringResource(R.string.password_must_contain_at_least_4_characters))
+                    }
+                }
             )
             Spacer(modifier = Modifier.height(100.dp))
-            Button(onClick = { onLoginClick() }) {
+            Button(
+                onClick = {
+                    if (!isEmailError && !isPasswordError) {
+                        onLoginClick()
+                    }
+                },
+                enabled = email.isNotEmpty() && password.isNotEmpty() && !isEmailError && !isPasswordError
+            ) {
                 Text(
                     modifier = Modifier.padding(horizontal = 24.dp),
                     text = stringResource(R.string.login)

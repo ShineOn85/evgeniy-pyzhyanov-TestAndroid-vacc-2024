@@ -15,4 +15,6 @@
     <string name="add_to_cart">Add to cart</string>
     <string name="delete_icon">delete icon</string>
     <string name="delete">Delete</string>
+    <string name="password_must_contain_at_least_4_characters">Password must contain at least 4 characters</string>
+    <string name="invalid_email">Invalid email</string>
 </resources>
