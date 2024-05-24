@@ -9,6 +9,7 @@ sealed class Screen(
 ) {
 
     data object HomeScreen : Screen(ROUTE_HOME)
+    data object ProductsScreen : Screen(ROUTE_PRODUCTS)
     data object ShoppingCartScreen : Screen(ROUTE_SHOPPING_CART)
     data object ProductDetailScreen : Screen(ROUTE_PRODUCT_DETAIL)
     {
@@ -26,6 +27,7 @@ sealed class Screen(
         const val KEY_PRODUCT = "product"
 
         private const val ROUTE_HOME = "home_screen"
+        private const val ROUTE_PRODUCTS = "products_screen"
         private const val ROUTE_SHOPPING_CART = "shopping_cart_screen"
         private const val ROUTE_PRODUCT_DETAIL = "product_detail_screen/{$KEY_PRODUCT}"
     }
