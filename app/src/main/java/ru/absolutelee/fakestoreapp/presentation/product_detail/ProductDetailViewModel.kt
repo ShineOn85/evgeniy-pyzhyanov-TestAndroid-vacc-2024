@@ -7,7 +7,7 @@ import ru.absolutelee.fakestoreapp.domain.usecase.GetProductDetailUseCase
 
 class ProductDetailViewModel(product: Product): ViewModel() {
 
-    private val repository = StoreRepositoryImpl()
+    private val repository = StoreRepositoryImpl
     private val getProductDetailUseCase = GetProductDetailUseCase(repository)
     val state = getProductDetailUseCase(product)
 }

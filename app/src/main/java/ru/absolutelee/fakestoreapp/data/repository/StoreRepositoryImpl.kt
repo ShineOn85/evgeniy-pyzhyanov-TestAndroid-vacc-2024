@@ -1,6 +1,5 @@
 package ru.absolutelee.fakestoreapp.data.repository
 
-import android.util.Log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -17,7 +16,7 @@ import ru.absolutelee.fakestoreapp.domain.entity.AuthState
 import ru.absolutelee.fakestoreapp.domain.entity.Product
 import ru.absolutelee.fakestoreapp.domain.repository.StoreRepository
 
-class StoreRepositoryImpl : StoreRepository {
+object StoreRepositoryImpl : StoreRepository {
 
     private val apiService = ApiFactory.apiService
 
@@ -31,9 +30,12 @@ class StoreRepositoryImpl : StoreRepository {
     private val products: List<Product>
         get() = _products.toList()
 
-    private val _cartProducts = mutableListOf<Product>()
-    private val cartProducts: List<Product>
-        get() = _cartProducts.toList()
+    private val _cartProductsList = mutableListOf<Product>()
+    private val cartProductsList: List<Product>
+        get() = _cartProductsList.toList()
+
+    private val changeCartProductEvent = MutableSharedFlow<Unit>()
+
 
     override fun getAuthState(): StateFlow<AuthState> {
         return flow {
@@ -62,6 +64,18 @@ class StoreRepositoryImpl : StoreRepository {
             initialValue = listOf()
         )
 
+    override fun getCartProducts() = flow {
+        changeCartProductEvent.emit(Unit)
+        changeCartProductEvent.collect{
+            emit(cartProductsList)
+        }
+    }.stateIn(
+        scope = scope,
+        started = SharingStarted.Eagerly,
+        initialValue = cartProductsList
+    )
+
+
     override fun getProductDetail(product: Product): StateFlow<Product> = flow {
         val product = apiService.getProductDetail(product.id).mapToProductEntity()
         emit(product)
@@ -77,17 +91,18 @@ class StoreRepositoryImpl : StoreRepository {
 
     override suspend fun changeIsCartStatus(product: Product) {
         if (product.isAddToCart) {
-            _cartProducts.remove(product)
+            _cartProductsList.remove(product)
             val newProduct = product.copy(isAddToCart = false)
             val productIndex = _products.indexOf(product)
             _products[productIndex] = newProduct
         } else {
             val newProduct = product.copy(isAddToCart = true)
-            _cartProducts.add(newProduct)
+            _cartProductsList.add(newProduct)
             val productIndex = _products.indexOf(product)
             _products[productIndex] = newProduct
 
         }
+        changeCartProductEvent.emit(Unit)
         changeProductListFlow.emit(products)
     }
 }

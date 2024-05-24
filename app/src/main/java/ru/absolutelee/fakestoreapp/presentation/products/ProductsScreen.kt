@@ -18,6 +18,7 @@ fun ProductsScreen(
 
     val state = viewModel.state.collectAsState()
 
+
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         contentPadding = PaddingValues(bottom = 80.dp)

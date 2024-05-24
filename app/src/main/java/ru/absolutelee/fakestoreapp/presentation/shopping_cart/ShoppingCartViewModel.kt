@@ -1,4 +1,4 @@
-package ru.absolutelee.fakestoreapp.presentation.products
+package ru.absolutelee.fakestoreapp.presentation.shopping_cart
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,20 +9,16 @@ import ru.absolutelee.fakestoreapp.domain.usecase.ChangeIsCartStatusUseCase
 import ru.absolutelee.fakestoreapp.domain.usecase.GetAllProductsUseCase
 import ru.absolutelee.fakestoreapp.domain.usecase.GetCartProductsUseCase
 
-class ProductsViewModel() : ViewModel() {
-
+class ShoppingCartViewModel : ViewModel() {
     private val repository = StoreRepositoryImpl
-    private val getAllProductsUseCase = GetAllProductsUseCase(repository)
+    private val getCartProductsUseCase = GetCartProductsUseCase(repository)
     private val changeIsCartStatusUseCase = ChangeIsCartStatusUseCase(repository)
-    private val getCartProductUseCase = GetCartProductsUseCase(repository)
 
-    val state = getAllProductsUseCase()
+    val state = getCartProductsUseCase()
 
-    fun changeCartStatus(product: Product) {
+    fun removeProductFromCart(product: Product){
         viewModelScope.launch {
             changeIsCartStatusUseCase(product)
         }
     }
-
-
 }
