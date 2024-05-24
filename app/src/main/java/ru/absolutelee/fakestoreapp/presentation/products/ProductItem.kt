@@ -40,7 +40,7 @@ import ru.absolutelee.fakestoreapp.domain.entity.Product
 fun ProductItem(
     product: Product,
     onCardClick: (Product) -> Unit,
-    omChangeCartStatusClick: (Product) -> Unit
+    onChangeCartStatusClick: (Product) -> Unit
 ) {
     Card(
         modifier = Modifier
@@ -82,7 +82,7 @@ fun ProductItem(
                 Text(text = "• ${product.ratingCount} count")
             }
             Spacer(modifier = Modifier.height(8.dp))
-            AddToCartButton(product, omChangeCartStatusClick)
+            AddToCartButton(product, onChangeCartStatusClick)
         }
 
 
@@ -137,5 +137,5 @@ fun ProductItemPreview() {
         isAddToCart = true,
         description = ""
     )
-    ProductItem(product = product, onCardClick = {}, omChangeCartStatusClick = {})
+    ProductItem(product = product, onCardClick = {}, onChangeCartStatusClick = {})
 }

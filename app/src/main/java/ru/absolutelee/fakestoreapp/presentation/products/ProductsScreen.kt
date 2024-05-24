@@ -29,7 +29,7 @@ fun ProductsScreen(
             ProductItem(
                 product = product,
                 onCardClick,
-                omChangeCartStatusClick = {
+                onChangeCartStatusClick = {
                     viewModel.changeCartStatus(it)
                 }
             )

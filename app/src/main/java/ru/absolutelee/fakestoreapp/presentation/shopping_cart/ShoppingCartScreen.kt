@@ -1,6 +1,8 @@
 package ru.absolutelee.fakestoreapp.presentation.shopping_cart
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -29,7 +31,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import ru.absolutelee.fakestoreapp.presentation.getApplicationComponent
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun ShoppingCartScreen() {
     val component = getApplicationComponent()
@@ -68,12 +70,14 @@ fun ShoppingCartScreen() {
                 items = state.value,
                 key = { it.id }
             ) {
-                ShoppingCartItem(
-                    product = it,
-                    onRemoveClick = {product ->
-                        viewModel.removeProductFromCart(product)
-                    }
-                )
+                Box(modifier = Modifier.animateItemPlacement()){
+                    ShoppingCartItem(
+                        product = it,
+                        onRemoveClick = {product ->
+                            viewModel.removeProductFromCart(product)
+                        }
+                    )
+                }
             }
         }
         Spacer(modifier = Modifier.height(80.dp))
