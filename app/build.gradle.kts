@@ -52,6 +52,8 @@ android {
 
 dependencies {
 
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.lifecycle.runtime.compose)
     implementation (libs.dagger)
     kapt (libs.dagger.compiler)
     implementation(libs.coil.compose)
