@@ -119,8 +119,7 @@ fun AddToCartButton(product: Product, onChangeCartStatusClick: (Product) -> Unit
                 stringResource(R.string.delete)
             } else {
                 stringResource(id = R.string.add_to_cart)
-            },
-            color = Color.White
+            }
         )
     }
 }
