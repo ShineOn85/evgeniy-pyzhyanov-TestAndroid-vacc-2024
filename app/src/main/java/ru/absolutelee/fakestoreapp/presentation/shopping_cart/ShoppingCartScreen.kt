@@ -1,7 +1,6 @@
 package ru.absolutelee.fakestoreapp.presentation.shopping_cart
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -19,21 +18,21 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import ru.absolutelee.fakestoreapp.domain.entity.Product
-import kotlin.random.Random
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ShoppingCartScreen(products: List<Product>) {
+fun ShoppingCartScreen() {
+    val viewModel = viewModel(ShoppingCartViewModel::class)
+    val state = viewModel.state.collectAsState()
     Scaffold(
         containerColor = MaterialTheme.colorScheme.secondaryContainer,
         topBar = {
@@ -47,7 +46,7 @@ fun ShoppingCartScreen(products: List<Product>) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(text = "Cart", fontSize = 24.sp, fontWeight = FontWeight.Bold)
                             Spacer(modifier = Modifier.weight(1f))
-                            Text(text = "4 items", fontSize = 20.sp)
+                            Text(text = "${state.value.size} items", fontSize = 20.sp)
                             Spacer(modifier = Modifier.width(12.dp))
                         }
                     }
@@ -64,34 +63,17 @@ fun ShoppingCartScreen(products: List<Product>) {
             contentPadding = PaddingValues(bottom = 80.dp)
         ) {
             items(
-                items = products,
+                items = state.value,
                 key = { it.id }
             ) {
-                ShoppingCartItem(product = it)
+                ShoppingCartItem(
+                    product = it,
+                    onRemoveClick = {product ->
+                        viewModel.removeProductFromCart(product)
+                    }
+                )
             }
         }
         Spacer(modifier = Modifier.height(80.dp))
     }
-}
-
-@Composable
-@Preview
-fun ShoppingCartScreenPreview() {
-    val products = mutableListOf<Product>().apply {
-        for (i in 0..10) {
-            add(
-                Product(
-                    id = i,
-                    title = "title $i",
-                    price = (i * 10).toDouble(),
-                    rating = i.toDouble() / 2f,
-                    ratingCount = i * 15,
-                    imageUrl = "",
-                    isAddToCart = Random.nextBoolean(),
-                    description = "Your perfect pack for everyday use and walks in the forest. Stash your laptop (up to 15 inches) in the padded sleeve, your everyday"
-                )
-            )
-        }
-    }
-    ShoppingCartScreen(products)
 }

@@ -23,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -30,11 +31,15 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import ru.absolutelee.fakestoreapp.R
 import ru.absolutelee.fakestoreapp.domain.entity.Product
 
 @Composable
-fun ShoppingCartItem(product: Product) {
+fun ShoppingCartItem(
+    product: Product,
+    onRemoveClick: (Product) -> Unit
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -43,26 +48,29 @@ fun ShoppingCartItem(product: Product) {
     ) {
         Row(
             modifier = Modifier
-                .padding(16.dp)
+                .padding(8.dp)
                 .height(120.dp)
         ) {
-            Image(
+            AsyncImage(
                 modifier = Modifier
                     .clip(shape = RoundedCornerShape(8.dp))
-                    .height(120.dp),
-                painter = painterResource(id = R.drawable.img),
+                    .height(120.dp)
+                    .width(100.dp)
+                    .clip(RoundedCornerShape(8.dp)),
+                model = product.imageUrl,
                 contentDescription = stringResource(
                     id = R.string.product_image
-                )
+                ),
+                contentScale = ContentScale.FillBounds,
             )
             Spacer(modifier = Modifier.width(16.dp))
             Column {
                 Text(text = "$${product.price}", fontSize = 24.sp, fontWeight = FontWeight.Bold)
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     modifier = Modifier.padding(end = 12.dp),
                     text = product.title,
-                    fontSize = 16.sp,
+                    fontSize = 14.sp,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -71,7 +79,9 @@ fun ShoppingCartItem(product: Product) {
                     modifier = Modifier.fillMaxWidth(),
                     contentAlignment = Alignment.CenterEnd
                 ) {
-                    Button(onClick = { }) {
+                    Button(
+                        modifier = Modifier.height(32.dp),
+                        onClick = { onRemoveClick.invoke(product) }) {
                         Icon(
                             modifier = Modifier.size(16.dp),
                             imageVector = Icons.Default.Delete,
@@ -86,20 +96,4 @@ fun ShoppingCartItem(product: Product) {
             }
         }
     }
-}
-
-@Composable
-@Preview
-fun ShoppingCartItemPreview() {
-    val product = Product(
-        id = 1,
-        title = "Mens Casual Premium Slim Fit T-Shirt",
-        price = 2485.5,
-        rating = 4.7,
-        ratingCount = 543,
-        imageUrl = "",
-        isAddToCart = false,
-        description = ""
-    )
-    ShoppingCartItem(product = product)
 }

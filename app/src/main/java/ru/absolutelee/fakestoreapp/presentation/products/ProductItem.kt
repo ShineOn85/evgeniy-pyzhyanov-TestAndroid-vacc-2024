@@ -1,6 +1,5 @@
 package ru.absolutelee.fakestoreapp.presentation.products
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,8 +12,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -24,12 +25,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import ru.absolutelee.fakestoreapp.R
 import ru.absolutelee.fakestoreapp.domain.entity.Product
 
@@ -37,7 +40,7 @@ import ru.absolutelee.fakestoreapp.domain.entity.Product
 fun ProductItem(
     product: Product,
     onCardClick: (Product) -> Unit,
-    onAddToCardClick: (Product) -> Unit
+    omChangeCartStatusClick: (Product) -> Unit
 ) {
     Card(
         modifier = Modifier
@@ -50,9 +53,11 @@ fun ProductItem(
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background)
     ) {
 
-        Image(
-            painter = painterResource(id = R.drawable.img),
-            contentDescription = stringResource(R.string.product_image)
+        AsyncImage(
+            modifier = Modifier.height(210.dp),
+            model = product.imageUrl,
+            contentDescription = stringResource(R.string.product_image),
+            contentScale = ContentScale.FillBounds
         )
         Column(modifier = Modifier.padding(8.dp)) {
             Text(
@@ -69,7 +74,7 @@ fun ProductItem(
                     modifier = Modifier.size(16.dp),
                     imageVector = Icons.Default.Star,
                     contentDescription = stringResource(R.string.rating_icon),
-                    tint = Color.Yellow
+                    tint = colorResource(id = R.color.dark_yellow)
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(text = product.rating.toString(), fontWeight = FontWeight.Bold)
@@ -77,7 +82,7 @@ fun ProductItem(
                 Text(text = "• ${product.ratingCount} count")
             }
             Spacer(modifier = Modifier.height(8.dp))
-            AddToCartButton(onAddToCardClick)
+            AddToCartButton(product, omChangeCartStatusClick)
         }
 
 
@@ -85,18 +90,37 @@ fun ProductItem(
 }
 
 @Composable
-fun AddToCartButton(onAddToCardClick: (Product) -> Unit) {
+fun AddToCartButton(product: Product, onChangeCartStatusClick: (Product) -> Unit) {
+
+    val colors = if (product.isAddToCart) {
+        ButtonDefaults.buttonColors(containerColor = Color.Gray)
+    } else {
+        ButtonDefaults.buttonColors()
+    }
+
     Button(
         modifier = Modifier.fillMaxWidth(),
-        onClick = { onAddToCardClick }) {
+        colors = colors,
+        onClick = { onChangeCartStatusClick.invoke(product) }) {
         Icon(
-            modifier = Modifier.size(16.dp),
-            imageVector = Icons.Outlined.ShoppingCart, contentDescription = stringResource(
+            modifier = Modifier.size(18.dp),
+            imageVector = if (product.isAddToCart) {
+                Icons.Outlined.Delete
+            } else {
+                Icons.Outlined.ShoppingCart
+            },
+            contentDescription = stringResource(
                 R.string.icon_cart
             )
         )
         Spacer(modifier = Modifier.width(8.dp))
-        Text(text = stringResource(id = R.string.add_to_cart))
+        Text(
+            text = if (product.isAddToCart) {
+                stringResource(R.string.delete)
+            } else {
+                stringResource(id = R.string.add_to_cart)
+            }
+        )
     }
 }
 
@@ -110,8 +134,8 @@ fun ProductItemPreview() {
         rating = 4.7,
         ratingCount = 543,
         imageUrl = "",
-        isAddToCart = false,
+        isAddToCart = true,
         description = ""
     )
-    ProductItem(product = product, onCardClick = {}, onAddToCardClick = {})
+    ProductItem(product = product, onCardClick = {}, omChangeCartStatusClick = {})
 }

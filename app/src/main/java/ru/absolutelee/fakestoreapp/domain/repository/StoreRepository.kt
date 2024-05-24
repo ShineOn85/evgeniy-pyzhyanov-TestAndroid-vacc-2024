@@ -12,7 +12,11 @@ interface StoreRepository {
 
     fun getProductDetail(product: Product): StateFlow<Product>
 
-    suspend fun addToCart(product: Product)
+    fun getCartProducts(): StateFlow<List<Product>>
 
-    suspend fun deleteFromCart(product: Product)
+    suspend fun auth()
+
+    suspend fun changeIsCartStatus(product: Product)
+
+
 }

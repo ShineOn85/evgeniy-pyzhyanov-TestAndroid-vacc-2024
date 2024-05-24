@@ -60,28 +60,10 @@ fun MainScreen() {
         AppNavGraph(
             navHostController = navigationState.navHostController,
             productsScreenContent = {
-                val products = mutableListOf<Product>().apply {
-                    for (i in 0..10) {
-                        add(
-                            Product(
-                                id = i,
-                                title = "Mens Casual Premium Slim Fit T-Shirt",
-                                price = (i * 10).toDouble(),
-                                rating = i.toDouble() / 2f,
-                                ratingCount = i * 15,
-                                imageUrl = "",
-                                isAddToCart = Random.nextBoolean(),
-                                description = "Your perfect pack for everyday use and walks in the forest. Stash your laptop (up to 15 inches) in the padded sleeve, your everyday"
-                            )
-                        )
-                    }
-                }
                 ProductsScreen(
-                    products = products,
                     onCardClick = {
                         navigationState.navigateToProductDetail(it)
                     },
-                    onAddToCartClick = {}
                 )
             },
             productDetailScreenContent = {
@@ -93,23 +75,7 @@ fun MainScreen() {
                 )
             },
             shoppingCartScreenContent = {
-                val products = mutableListOf<Product>().apply {
-                    for (i in 0..10) {
-                        add(
-                            Product(
-                                id = i,
-                                title = "title $i",
-                                price = (i * 10).toDouble(),
-                                rating = i.toDouble() / 2f,
-                                ratingCount = i * 15,
-                                imageUrl = "",
-                                isAddToCart = Random.nextBoolean(),
-                                description = "Your perfect pack for everyday use and walks in the forest. Stash your laptop (up to 15 inches) in the padded sleeve, your everyday"
-                            )
-                        )
-                    }
-                }
-                ShoppingCartScreen(products = products)
+                ShoppingCartScreen()
             }
         )
     }

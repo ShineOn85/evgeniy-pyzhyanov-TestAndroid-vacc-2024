@@ -51,6 +51,9 @@ android {
 
 dependencies {
 
+    implementation(libs.coil.compose)
+    implementation (libs.converter.gson)
+    implementation (libs.retrofit)
     implementation (libs.gson)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.core.ktx)
