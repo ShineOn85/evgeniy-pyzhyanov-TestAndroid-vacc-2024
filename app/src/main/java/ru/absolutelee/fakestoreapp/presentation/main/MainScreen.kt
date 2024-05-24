@@ -13,10 +13,10 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import ru.absolutelee.fakestoreapp.domain.entity.Product
 import ru.absolutelee.fakestoreapp.navigation.AppNavGraph
-import ru.absolutelee.fakestoreapp.navigation.Screen
 import ru.absolutelee.fakestoreapp.navigation.rememberNavigationState
 import ru.absolutelee.fakestoreapp.presentation.product_detail.ProductDetailScreen
 import ru.absolutelee.fakestoreapp.presentation.products.ProductsScreen
+import ru.absolutelee.fakestoreapp.presentation.shopping_cart.ShoppingCartScreen
 import kotlin.random.Random
 
 @Preview(showBackground = true)
@@ -47,9 +47,6 @@ fun MainScreen() {
                         onClick = {
                             if (!selected) {
                                 navigationState.navigateTo(item.screen.route)
-                            }
-                            if (navBackStackEntry?.destination?.route == Screen.ProductDetailScreen.route){
-                                navigationState.navHostController.navigateUp()
                             }
                         },
                         icon = { Icon(imageVector = item.icon, contentDescription = null) },
@@ -95,7 +92,25 @@ fun MainScreen() {
                     }
                 )
             },
-            shoppingCartScreenContent = { Text(text = "cart") }
+            shoppingCartScreenContent = {
+                val products = mutableListOf<Product>().apply {
+                    for (i in 0..10) {
+                        add(
+                            Product(
+                                id = i,
+                                title = "title $i",
+                                price = (i * 10).toDouble(),
+                                rating = i.toDouble() / 2f,
+                                ratingCount = i * 15,
+                                imageUrl = "",
+                                isAddToCart = Random.nextBoolean(),
+                                description = "Your perfect pack for everyday use and walks in the forest. Stash your laptop (up to 15 inches) in the padded sleeve, your everyday"
+                            )
+                        )
+                    }
+                }
+                ShoppingCartScreen(products = products)
+            }
         )
     }
 }
