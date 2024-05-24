@@ -31,6 +31,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -44,6 +45,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
 import ru.absolutelee.fakestoreapp.R
 import ru.absolutelee.fakestoreapp.domain.entity.Product
 import ru.absolutelee.fakestoreapp.presentation.products.AddToCartButton
@@ -55,6 +59,10 @@ fun ProductDetailScreen(
     onBackPressed: () -> Unit
 ) {
 
+    val viewModel = viewModel(ProductDetailViewModel::class, factory = ProductDetailsViewModelFactory(product))
+
+    val state = viewModel.state.collectAsState()
+
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
 
     Scaffold(
@@ -64,7 +72,7 @@ fun ProductDetailScreen(
                 scrollBehavior = scrollBehavior,
                 title = {
                     Text(
-                        text = product.title,
+                        text = state.value.title,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -83,9 +91,9 @@ fun ProductDetailScreen(
                 .fillMaxWidth()
                 .verticalScroll(rememberScrollState())
         ) {
-            Image(
+            AsyncImage(
                 modifier = Modifier.fillMaxWidth(),
-                painter = painterResource(id = R.drawable.img),
+                model = product.imageUrl,
                 contentDescription = stringResource(id = R.string.product_image),
                 contentScale = ContentScale.FillWidth
             )
@@ -95,7 +103,7 @@ fun ProductDetailScreen(
                         .fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(text = "$${product.price}", fontSize = 24.sp, fontWeight = FontWeight.Bold)
+                    Text(text = "$${state.value.price}", fontSize = 24.sp, fontWeight = FontWeight.Bold)
                     Box {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(
@@ -106,13 +114,13 @@ fun ProductDetailScreen(
                             )
                             Spacer(modifier = Modifier.width(4.dp))
                             Text(
-                                text = product.rating.toString(),
+                                text = state.value.rating.toString(),
                                 fontSize = 20.sp,
                                 fontWeight = FontWeight.Bold
                             )
                             Spacer(modifier = Modifier.width(4.dp))
                             Text(
-                                text = "• ${product.ratingCount} count",
+                                text = "• ${state.value.ratingCount} count",
                                 fontSize = 20.sp
                             )
                         }
@@ -122,7 +130,7 @@ fun ProductDetailScreen(
                 }
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = product.title,
+                    text = state.value.title,
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -141,7 +149,7 @@ fun ProductDetailScreen(
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     modifier = Modifier.padding(16.dp),
-                    text = product.description,
+                    text = state.value.description,
                     fontSize = 16.sp
                 )
                 Box(modifier = Modifier.padding(16.dp)){
@@ -153,20 +161,4 @@ fun ProductDetailScreen(
 
         }
     }
-}
-
-@Composable
-@Preview(showBackground = true)
-fun ProductDetailScreenPreview() {
-    val product = Product(
-        id = 1,
-        title = "Mens Casual Premium Slim Fit T-Shirt",
-        price = 2485.5,
-        rating = 4.7,
-        ratingCount = 543,
-        imageUrl = "",
-        isAddToCart = false,
-        description = "Your perfect pack for everyday use and walks in the forest. Stash your laptop (up to 15 inches) in the padded sleeve, your everyday"
-    )
-    ProductDetailScreen(product = product, onBackPressed = {})
 }
