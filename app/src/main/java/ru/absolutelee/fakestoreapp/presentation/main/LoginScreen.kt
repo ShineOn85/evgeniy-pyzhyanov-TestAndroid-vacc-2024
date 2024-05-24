@@ -12,12 +12,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -36,6 +39,17 @@ import ru.absolutelee.fakestoreapp.R
 
 @Composable
 fun LoginScreen(onLoginClick: () -> Unit) {
+
+    val imeState = rememberImeState()
+    val scrollState = rememberScrollState()
+
+    LaunchedEffect(key1 = imeState.value) {
+        if (imeState.value) {
+            scrollState.scrollTo(scrollState.maxValue)
+        }
+    }
+
+
     var email by rememberSaveable {
         mutableStateOf("")
     }
@@ -59,7 +73,10 @@ fun LoginScreen(onLoginClick: () -> Unit) {
         isPasswordError = password.length < 4
     }
 
-    Box(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
+    Box(
+        modifier = Modifier
+            .background(MaterialTheme.colorScheme.background)
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -67,85 +84,93 @@ fun LoginScreen(onLoginClick: () -> Unit) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
-            Image(
-                painterResource(id = R.drawable.login),
-                contentDescription = stringResource(R.string.welcome_image)
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Text(
-                text = stringResource(R.string.welcome),
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            OutlinedTextField(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(24.dp),
-                value = email,
-                onValueChange = {
-                    isEmailValid(it)
-                    email = it
-                },
-                label = {
-                    Text(text = stringResource(R.string.email_address))
-                },
-                singleLine = true,
-                isError = isEmailError,
-                supportingText = {
-                    if (isEmailError) {
-                        Text(text = stringResource(R.string.invalid_email))
-                    }
-                }
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            OutlinedTextField(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(24.dp),
-                value = password,
-                onValueChange = {
-                    isPasswordValid(it)
-                    password = it
-                },
-                visualTransformation = PasswordVisualTransformation(),
-                label = {
-                    Text(text = stringResource(R.string.password))
-                },
-                singleLine = true,
-                isError = isPasswordError,
-                supportingText = {
-                    if (isPasswordError) {
-                        Text(text = stringResource(R.string.password_must_contain_at_least_4_characters))
-                    }
-                }
-            )
-            Spacer(modifier = Modifier.height(100.dp))
-            Button(
-                onClick = {
-                    if (!isEmailError && !isPasswordError) {
-                        onLoginClick()
-                    }
-                },
-                enabled = email.isNotEmpty() && password.isNotEmpty() && !isEmailError && !isPasswordError
+            Column(
+                Modifier.verticalScroll(scrollState),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    modifier = Modifier.padding(horizontal = 24.dp),
-                    text = stringResource(R.string.login)
+                Image(
+                    painterResource(id = R.drawable.login),
+                    contentDescription = stringResource(R.string.welcome_image)
                 )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Text(
+                    text = stringResource(R.string.welcome),
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                OutlinedTextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(24.dp),
+                    value = email,
+                    onValueChange = {
+                        isEmailValid(it)
+                        email = it
+                    },
+                    label = {
+                        Text(text = stringResource(R.string.email_address))
+                    },
+                    singleLine = true,
+                    isError = isEmailError,
+                    supportingText = {
+                        if (isEmailError) {
+                            Text(text = stringResource(R.string.invalid_email))
+                        }
+                    },
+
+                    )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                OutlinedTextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(24.dp),
+                    value = password,
+                    onValueChange = {
+                        isPasswordValid(it)
+                        password = it
+                    },
+                    visualTransformation = PasswordVisualTransformation(),
+                    label = {
+                        Text(text = stringResource(R.string.password))
+                    },
+                    singleLine = true,
+                    isError = isPasswordError,
+                    supportingText = {
+                        if (isPasswordError) {
+                            Text(text = stringResource(R.string.password_must_contain_at_least_4_characters))
+                        }
+                    }
+                )
+                Spacer(modifier = Modifier.height(120.dp))
+                Button(
+                    onClick = {
+                        if (!isEmailError && !isPasswordError) {
+                            onLoginClick()
+                        }
+                    },
+                    enabled = email.isNotEmpty() && password.isNotEmpty() && !isEmailError && !isPasswordError
+                ) {
+                    Text(
+                        modifier = Modifier.padding(horizontal = 24.dp),
+                        text = stringResource(R.string.login)
+                    )
+                }
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    modifier = Modifier.clickable { },
+                    text = stringResource(R.string.or_sign_up),
+                    fontSize = 16.sp,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    textDecoration = TextDecoration.Underline
+                )
+                Spacer(modifier = Modifier.height(20.dp))
             }
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                modifier = Modifier.clickable { },
-                text = stringResource(R.string.or_sign_up),
-                fontSize = 16.sp,
-                color = MaterialTheme.colorScheme.onBackground,
-                textDecoration = TextDecoration.Underline
-            )
+
         }
     }
 
