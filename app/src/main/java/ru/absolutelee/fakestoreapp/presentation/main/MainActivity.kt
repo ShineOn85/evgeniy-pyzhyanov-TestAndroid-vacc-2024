@@ -10,7 +10,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             FakeStoreAppTheme(dynamicColor = false) {
-                MainScreen()
+
             }
         }
     }
