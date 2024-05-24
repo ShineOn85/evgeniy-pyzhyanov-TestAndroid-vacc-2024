@@ -14,6 +14,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import ru.absolutelee.fakestoreapp.domain.entity.Product
 import ru.absolutelee.fakestoreapp.navigation.AppNavGraph
 import ru.absolutelee.fakestoreapp.navigation.rememberNavigationState
+import ru.absolutelee.fakestoreapp.presentation.product_detail.ProductDetailScreen
 import ru.absolutelee.fakestoreapp.presentation.products.ProductsScreen
 import kotlin.random.Random
 
@@ -53,7 +54,7 @@ fun MainScreen() {
                 }
             }
         }
-    ) {_ ->
+    ) { _ ->
 
         AppNavGraph(
             navHostController = navigationState.navHostController,
@@ -74,10 +75,19 @@ fun MainScreen() {
                         )
                     }
                 }
-                ProductsScreen(products = products)
+                ProductsScreen(products = products, onCardClick = {
+                    navigationState.navigateToProductDetail(it)
+                })
             },
-            productDetailScreenContent = { Text(text = "detail")},
-            shoppingCartScreenContent = { Text(text = "cart")}
+            productDetailScreenContent = {
+                ProductDetailScreen(
+                    product = it,
+                    onBackPressed = {
+                        navigationState.navHostController.popBackStack()
+                    }
+                )
+            },
+            shoppingCartScreenContent = { Text(text = "cart") }
         )
     }
 }

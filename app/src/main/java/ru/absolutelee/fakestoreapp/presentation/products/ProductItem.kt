@@ -1,6 +1,5 @@
 package ru.absolutelee.fakestoreapp.presentation.products
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -35,14 +34,14 @@ import ru.absolutelee.fakestoreapp.R
 import ru.absolutelee.fakestoreapp.domain.entity.Product
 
 @Composable
-fun ProductItem(product: Product) {
+fun ProductItem(product: Product, onCardClick: (Product) -> Unit) {
     Card(
         modifier = Modifier
             .wrapContentHeight()
             .width(200.dp)
             .padding(8.dp)
             .clickable {
-                       Log.d("ProductItem", "${product.id}")
+                onCardClick(product)
             },
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background)
     ) {
@@ -104,7 +103,6 @@ fun ProductItemPreview() {
         imageUrl = "",
         isAddToCart = false,
         description = ""
-
     )
-    ProductItem(product = product)
+    ProductItem(product = product, onCardClick = {})
 }

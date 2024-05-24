@@ -11,10 +11,10 @@ import ru.absolutelee.fakestoreapp.domain.entity.Product
 import kotlin.random.Random
 
 @Composable
-fun ProductsScreen(products: List<Product>) {
+fun ProductsScreen(products: List<Product>, onCardClick: (Product) -> Unit) {
     LazyVerticalGrid(columns = GridCells.Fixed(2), contentPadding = PaddingValues(bottom = 80.dp)) {
         items(items = products, key = { it.id }) {
-            ProductItem(product = it)
+            ProductItem(product = it, onCardClick)
         }
     }
 }
@@ -38,5 +38,5 @@ fun ProductScreenPreview() {
             )
         }
     }
-    ProductsScreen(products = products)
+    ProductsScreen(products = products, onCardClick = {})
 }
