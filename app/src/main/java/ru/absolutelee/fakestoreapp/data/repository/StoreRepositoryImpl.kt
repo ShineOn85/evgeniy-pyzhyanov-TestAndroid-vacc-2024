@@ -2,23 +2,28 @@ package ru.absolutelee.fakestoreapp.data.repository
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.retry
 import kotlinx.coroutines.flow.stateIn
 import ru.absolutelee.fakestoreapp.data.mapper.mapToProductEntity
 import ru.absolutelee.fakestoreapp.data.mergeWith
 import ru.absolutelee.fakestoreapp.data.network.ApiFactory
+import ru.absolutelee.fakestoreapp.data.network.ApiService
 import ru.absolutelee.fakestoreapp.domain.entity.AuthState
 import ru.absolutelee.fakestoreapp.domain.entity.Product
 import ru.absolutelee.fakestoreapp.domain.repository.StoreRepository
+import javax.inject.Inject
 
-object StoreRepositoryImpl : StoreRepository {
+class StoreRepositoryImpl @Inject constructor(
+    private val apiService: ApiService
+) : StoreRepository {
 
-    private val apiService = ApiFactory.apiService
 
     private val scope = CoroutineScope(Dispatchers.Default)
 
@@ -57,6 +62,10 @@ object StoreRepositoryImpl : StoreRepository {
         _products.addAll(productsResponse)
         emit(products)
     }.mergeWith(changeProductListFlow)
+        .retry {
+            delay(2000)
+            true
+        }
         .catch { }
         .stateIn(
             scope = scope,
@@ -66,7 +75,7 @@ object StoreRepositoryImpl : StoreRepository {
 
     override fun getCartProducts() = flow {
         changeCartProductEvent.emit(Unit)
-        changeCartProductEvent.collect{
+        changeCartProductEvent.collect {
             emit(cartProductsList)
         }
     }.stateIn(
@@ -79,11 +88,16 @@ object StoreRepositoryImpl : StoreRepository {
     override fun getProductDetail(product: Product): StateFlow<Product> = flow {
         val product = apiService.getProductDetail(product.id).mapToProductEntity()
         emit(product)
-    }.stateIn(
-        scope = scope,
-        started = SharingStarted.Lazily,
-        initialValue = Product(id = 3, "", 1.2, 1.4, 2, "", false, "")
-    )
+    }.retry {
+        delay(2000)
+        true
+    }
+        .catch { }
+        .stateIn(
+            scope = scope,
+            started = SharingStarted.Lazily,
+            initialValue = Product(id = 3, "", 1.2, 1.4, 2, "", false, "")
+        )
 
     override suspend fun auth() {
         loggedIn.emit(true)

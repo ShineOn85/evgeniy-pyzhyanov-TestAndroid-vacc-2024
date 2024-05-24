@@ -42,6 +42,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import ru.absolutelee.fakestoreapp.R
 import ru.absolutelee.fakestoreapp.domain.entity.Product
+import ru.absolutelee.fakestoreapp.presentation.getApplicationComponent
 import ru.absolutelee.fakestoreapp.presentation.products.AddToCartButton
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -51,8 +52,12 @@ fun ProductDetailScreen(
     onBackPressed: () -> Unit
 ) {
 
+    val component = getApplicationComponent()
+        .getProductDetailScreenComponentFactory()
+        .create(product)
+
     val viewModel =
-        viewModel(ProductDetailViewModel::class, factory = ProductDetailsViewModelFactory(product))
+        viewModel(ProductDetailViewModel::class, factory = component.getViewModelFactory())
 
     val state = viewModel.state.collectAsState()
 
